@@ -6,6 +6,7 @@ import joblib
 
 # --- Load your fitted scaler and encoder ---
 scaler = joblib.load("scaler.pkl")           # StandardScaler fitted on your training data
+y_scaler = joblib.load("y_scaler.pkl")           # StandardScaler fitted on your training data
 encoder = joblib.load("encoder.pkl")   # LabelEncoder fitted on your training data
 
 # Columns
@@ -55,8 +56,9 @@ if prediction == True:
     model = joblib.load(open("best_rf_model.pkl", "rb"))
     # data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
     result = model.predict(user_input)
+    result_transformed = y_scaler.transform(result)
+    st.success(f"The predicted car price is Rs{result_transformed[0]:,.2f}")
 
-    st.success(f"The predicted car price is Rs{result[0]:,.2f}")
 
 
 
