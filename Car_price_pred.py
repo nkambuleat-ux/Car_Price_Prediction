@@ -56,7 +56,7 @@ if prediction == True:
     model = joblib.load(open("best_rf_model.pkl", "rb"))
     # data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
     result = model.predict(user_input)
-    result_transformed = y_scaler.inverse_transform(result)
+    result_transformed = y_scaler.inverse_transform(result.reshape(1, -1))
     st.success(f"The predicted car price is Rs{result_transformed:.2f}")
 
 
