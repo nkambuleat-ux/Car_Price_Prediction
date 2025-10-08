@@ -4,11 +4,10 @@ import numpy as np
 import pandas as pd
 import joblib
 
-# --- Load your fitted model, scaler and encoder once ---
-model = joblib.load("best_rf_model.pkl")
-scaler = joblib.load("scaler.pkl")           # StandardScaler fitted on training data
-y_scaler = joblib.load("y_scaler.pkl")       # StandardScaler fitted on target variable
-encoder = joblib.load("encoder.pkl")         # LabelEncoder fitted on training data
+# --- Load your fitted scaler and encoder ---
+scaler = joblib.load("scaler.pkl")           # StandardScaler fitted on your training data
+y_scaler = joblib.load("y_scaler.pkl")           # StandardScaler fitted on your training data
+encoder = joblib.load("encoder.pkl")   # LabelEncoder fitted on your training data
 
 # Columns
 numeric_cols = ['vehicle_age', 'mileage', 'engine', 'max_power']
@@ -23,7 +22,7 @@ vehicle_age = st.number_input("Car age (years)", 0, 30)
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
 mileage = st.number_input("Car mileage (km/L)", 1, 40)
 engine = st.number_input("Car engine capacity (cc)", 100, 10000)
-max_power = st.number_input("Maximum power (kW)", 10, 700)
+max_power = st.number_input("Maximum power (700kW)", 10, 700)
 
 
 # Create dataframe
@@ -35,21 +34,23 @@ user_input = pd.DataFrame({
     'max_power': [max_power],    
 })
 
-#--- Preprocessing ---
+# --- Preprocessing ---
 # Scale numeric columns
 user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
-user_input[numeric_cols] = np.exp(user_input[numeric_cols])
+user_input[numeric_cols] = np.exp(user_input[numeric_cols]) - 1
 
 # Encode categorical columns
-user_input[categorical_cols] = user_input[categorical_cols].apply(lambda col: encoder.transform(col).astype(int))
+user_input[categorical_cols] = user_input[categorical_cols].apply(lambda col: encoder.transform(col))
 
 st.write("Processed input ready for model:")
 st.dataframe(user_input)
 
 #Create a button to predict the output
-if st.button("Predict"):
+prediction = st.button("Predict")
+if prediction == True:
+    model = joblib.load(open("best_rf_model.pkl", "rb"))
+    # data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
     result = model.predict(user_input)
     result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
-    prediction = np.exp(result_transformed)
-    st.success(f"The predicted car price is Rs {result_transformed[0][0]:,.2f}")
-
+    prediction = np.exp(result_transformed) - 1
+    st.success(f"The predicted car price is Rs{result_transformed}")
