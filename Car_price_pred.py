@@ -6,7 +6,7 @@ import joblib
 
 # --- Load your fitted scaler and encoder ---
 scaler = joblib.load("scaler.pkl")           # StandardScaler fitted on your training data
-encoder = joblib.load("label_encoder.pkl")   # LabelEncoder fitted on your training data
+encoder = joblib.load("encoder.pkl")   # LabelEncoder fitted on your training data
 
 # Columns
 numeric_cols = ['vehicle_age', 'mileage', 'engine', 'max_power']
@@ -55,4 +55,5 @@ st.write(f"The predicted car price is Rs{prediction[0]}")
 #     model = pickle.load(open("C:\Users\ankambule\VS_Code\best_rf_model.pkl", "rb"))
 #     data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
 #     result = model.predict(data)
+
 #     st.success(f"The predicted car price is Rs{result[0]:,.2f}")
