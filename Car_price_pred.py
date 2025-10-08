@@ -36,8 +36,8 @@ user_input = pd.DataFrame({
 
 # --- Preprocessing ---
 # Scale numeric columns
+user_input[numeric_cols] = np.log(user_input[numeric_cols]) + 1
 user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
-user_input[numeric_cols] = np.exp(user_input[numeric_cols]) - 1
 
 # Encode categorical columns
 user_input[categorical_cols] = user_input[categorical_cols].apply(lambda col: encoder.transform(col))
@@ -54,3 +54,4 @@ if prediction == True:
     result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
     prediction = np.exp(result_transformed) - 1
     st.success(f"The predicted car price is Rs{result_transformed}")
+
