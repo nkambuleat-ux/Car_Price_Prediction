@@ -18,7 +18,7 @@ st.header("Please complete the details")
 
 #Features used to train the model
 vehicle_age = st.number_input("Car age (years)", 0, 30)
-transmission_type = st.selectbox("Transmission type", "Automatic", "Manual")
+transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
 mileage = st.number_input("Car mileage (km/L)", 1, 40)
 engine = st.number_input("Car engine capacity (cc)", 100, 10000)
 max_power = st.number_input("Maximum power (700kW)", 10, 700)
@@ -57,3 +57,4 @@ st.write(f"The predicted car price is Rs{prediction[0]}")
 #     result = model.predict(data)
 
 #     st.success(f"The predicted car price is Rs{result[0]:,.2f}")
+
