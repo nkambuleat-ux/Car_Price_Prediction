@@ -27,10 +27,10 @@ max_power = st.number_input("Maximum power (700kW)", 10, 700)
 # Create dataframe
 user_input = pd.DataFrame({
     'vehicle_age': [vehicle_age],
+    'transmission_type': [transmission_type]
     'mileage': [mileage],
     'engine': [engine],
-    'max_power': [max_power],
-    'transmission_type': [transmission_type]
+    'max_power': [max_power],    
 })
 
 # --- Preprocessing ---
@@ -57,6 +57,7 @@ if prediction == True:
     result = model.predict(user_input)
 
     st.success(f"The predicted car price is Rs{result[0]:,.2f}")
+
 
 
 
