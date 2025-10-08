@@ -35,7 +35,7 @@ user_input = pd.DataFrame({
     'max_power': [max_power],    
 })
 
- --- Preprocessing ---
+#--- Preprocessing ---
 # Scale numeric columns
 user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
 
@@ -50,6 +50,7 @@ if st.button("Predict"):
     result = model.predict(user_input)
     result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
     st.success(f"The predicted car price is Rs {result_transformed[0][0]:,.2f}")
+
 
 
 
