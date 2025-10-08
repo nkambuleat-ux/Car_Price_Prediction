@@ -38,6 +38,7 @@ user_input = pd.DataFrame({
 #--- Preprocessing ---
 # Scale numeric columns
 user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
+user_input[numeric_cols] = np.exp(user_input[numeric_cols])
 
 # Encode categorical columns
 user_input[categorical_cols] = user_input[categorical_cols].apply(lambda col: encoder.transform(col).astype(int))
@@ -49,17 +50,6 @@ st.dataframe(user_input)
 if st.button("Predict"):
     result = model.predict(user_input)
     result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
+    prediction = np.exp(result_transformed)
     st.success(f"The predicted car price is Rs {result_transformed[0][0]:,.2f}")
-
-
-
-
-
-
-
-
-
-
-
-
 
