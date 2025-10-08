@@ -53,9 +53,10 @@ st.dataframe(user_input)
 prediction = st.button("Predict")
 if prediction == True:
     model = joblib.load(open("best_rf_model.pkl", "rb"))
-    data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
-    result = model.predict(data)
+    # data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
+    result = model.predict(user_input)
 
     st.success(f"The predicted car price is Rs{result[0]:,.2f}")
+
 
 
