@@ -4,55 +4,55 @@ import numpy as np
 import pandas as pd
 import joblib
 
-# --- Load your fitted scaler and encoder ---
-scaler = joblib.load("scaler.pkl")           # StandardScaler fitted on your training data
-y_scaler = joblib.load("y_scaler.pkl")           # StandardScaler fitted on your training data
-encoder = joblib.load("encoder.pkl")   # LabelEncoder fitted on your training data
+# --- Load your fitted scaler, y_scaler, encoder and model ---
+scaler = joblib.load("scaler.pkl")          # StandardScaler fitted on training numeric columns
+y_scaler = joblib.load("y_scaler.pkl")      # Scaler fitted on target variable
+encoder = joblib.load("encoder.pkl")        # LabelEncoder fitted on transmission type
+model = joblib.load("best_rf_model.pkl")    # Trained model
 
 # Columns
 numeric_cols = ['vehicle_age', 'mileage', 'engine', 'max_power']
 categorical_cols = ['transmission_type']
 
-#Streamlit App
+# --- Streamlit UI ---
 st.title("Car Price Prediction Application")
-st.header("Please complete the details")
+st.header("Please complete the details below")
 
-#Features used to train the model
-vehicle_age = st.number_input("Car age (years)", 0, 30)
+# Feature inputs
+vehicle_age = st.number_input("Car age (years)", 0, 30, value=5)
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
-mileage = st.number_input("Car mileage (km/L)", 1, 40)
-engine = st.number_input("Car engine capacity (cc)", 100, 10000)
-max_power = st.number_input("Maximum power (700kW)", 10, 700)
+mileage = st.number_input("Car mileage (km/L)", 1, 40, value=15)
+engine = st.number_input("Car engine capacity (cc)", 100, 10000, value=1500)
+max_power = st.number_input("Maximum power (kW)", 10, 700, value=100)
 
-
-# Create dataframe
+# Create a dataframe with user input
 user_input = pd.DataFrame({
     'vehicle_age': [vehicle_age],
     'transmission_type': [transmission_type],
     'mileage': [mileage],
     'engine': [engine],
-    'max_power': [max_power],    
+    'max_power': [max_power]
 })
 
 # --- Preprocessing ---
-# Scale numeric columns
-user_input[numeric_cols] = np.log(user_input[numeric_cols]) + 1
-user_input[numeric_cols] = scaler.fit_transform(user_input[numeric_cols])
+# Apply log( x + 1 ) to numeric columns to avoid log(0)
+user_input[numeric_cols] = np.log1p(user_input[numeric_cols])
 
-# Encode categorical columns
+# Transform numeric features using the **already fitted** scaler
+user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
+
+# Encode categorical feature using the fitted encoder
 user_input[categorical_cols] = user_input[categorical_cols].apply(lambda col: encoder.transform(col))
 
 st.write("Processed input ready for model:")
 st.dataframe(user_input)
 
-#Create a button to predict the output
-prediction = st.button("Predict")
-if prediction == True:
-    model = joblib.load(open("best_rf_model.pkl", "rb"))
-    # data = np.array([['vehicle_age', 'transmission_type', 'mileage', 'engine', 'max_power']])
+# --- Prediction ---
+if st.button("Predict"):
     result = model.predict(user_input)
+    # Inverse transform the predicted (scaled) value back to original
     result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
-    prediction = np.exp(result_transformed) - 1
-    st.success(f"The predicted car price is Rs{result_transformed}")
-
-
+    # If the target was also log-transformed during training, reverse it
+    final_prediction = np.expm1(result_transformed).flatten()[0]
+    
+    st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
