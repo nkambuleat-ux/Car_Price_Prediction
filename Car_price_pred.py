@@ -29,7 +29,7 @@ st.title("Car Price Prediction Application")
 st.header("Please complete the details below")
 
 # Feature inputs
-fuel_type = st.selectbox("Fuel type", ["Petrol", "Diesel", "CNG", "LPG", "Electric"])
+fuel_type = st.selectbox("Fuel type", ["Diesel", "Electric", "LPG", "Petrol"])
 vehicle_age = st.number_input("Car age (years)", 0, 30, value=5)
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
 mileage = st.number_input("Car mileage (km/L)", 1, 40, value=15)
@@ -86,6 +86,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
