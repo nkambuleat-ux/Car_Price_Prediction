@@ -29,11 +29,6 @@ st.title("Car Price Prediction Application")
 st.header("Please complete the details below")
 
 # Feature inputs
-brand = st.selectbox("Vehicle brand", ['Maruti', 'Hyundai', 'Ford', 'Renault', 'Mini', 'Mercedes-Benz', 'Toyota',
- 'Volkswagen', 'Honda', 'Mahindra', 'Datsun', 'Tata', 'Kia', 'BMW', 'Audi',
- 'Land Rover', 'Jaguar', 'MG', 'Isuzu', 'Porsche', 'Skoda', 'Volvo', 'Lexus',
- 'Jeep', 'Maserati', 'Bentley', 'Nissan', 'isuzu', 'Ferrari', 'Mercedes-AMG',
- 'Rolls-Royce', 'Force'])
 fuel_type = st.selectbox("Fuel type", ["Petrol", "Diesel", "CNG", "LPG", "Electric"])
 vehicle_age = st.number_input("Car age (years)", 0, 30, value=5)
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
@@ -74,8 +69,8 @@ for col in dummy_columns:
         user_input[col] = 0
 
 
-# Ensure column order matches training
-user_input = user_input[dummy_columns]
+# # Ensure column order matches training
+# user_input = user_input[dummy_columns]
 
 st.write("Processed input ready for model:")
 st.dataframe(user_input)
@@ -91,6 +86,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
