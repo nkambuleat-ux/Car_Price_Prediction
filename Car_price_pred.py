@@ -13,7 +13,7 @@ y_scaler = joblib.load("y_scaler.pkl")      # Scaler fitted on target variable
 encoder = joblib.load("encoder.pkl")        # LabelEncoder fitted on transmission type
 
 #load the model
-url = "https://drive.google.com/file/d/1EI0zukjBbhKcxTclqNQdUODSiV1fs7NB/view?usp=sharing"
+url = "https://drive.google.com/file/d/1EI0zukjBbhKcxTclqNQdUODSiV1fs7NB"
 response = requests.get(url)
 model = joblib.load(io.BytesIO(response.content))
 
@@ -91,6 +91,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
