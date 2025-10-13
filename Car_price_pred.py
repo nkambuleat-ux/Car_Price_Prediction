@@ -69,8 +69,8 @@ for col in dummy_columns:
         user_input[col] = 0
 
 
-# # Ensure column order matches training
-# user_input = user_input[dummy_columns]
+# Ensure column order matches training
+user_input = user_input[dummy_columns]
 
 st.write("Processed input ready for model:")
 st.dataframe(user_input)
@@ -86,6 +86,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
