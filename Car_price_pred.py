@@ -8,7 +8,12 @@ import joblib
 scaler = joblib.load("scaler.pkl")          # StandardScaler fitted on training numeric columns
 y_scaler = joblib.load("y_scaler.pkl")      # Scaler fitted on target variable
 encoder = joblib.load("encoder.pkl")        # LabelEncoder fitted on transmission type
-model = joblib.load("best_rf_model.pkl")    # Trained model
+
+#load the model
+url = "https://drive.google.com/file/d/1EI0zukjBbhKcxTclqNQdUODSiV1fs7NB/view?usp=drive_link"
+response = requests.get(url)
+model = joblib.load(io.BytesIO(response.content))
+
 
 # Columns
 with open('dummy_columns.pkl', 'rb') as f:
@@ -21,12 +26,12 @@ st.title("Car Price Prediction Application")
 st.header("Please complete the details below")
 
 # Feature inputs
-brand = st.selectbox("Vehicle brand", ['Maruti' 'Hyundai' 'Ford' 'Renault' 'Mini' 'Mercedes-Benz' 'Toyota'
- 'Volkswagen' 'Honda' 'Mahindra' 'Datsun' 'Tata' 'Kia' 'BMW' 'Audi'
- 'Land Rover' 'Jaguar' 'MG' 'Isuzu' 'Porsche' 'Skoda' 'Volvo' 'Lexus'
- 'Jeep' 'Maserati' 'Bentley' 'Nissan' 'isuzu' 'Ferrari' 'Mercedes-AMG'
- 'Rolls-Royce' 'Force'])
-fuel_type = st.selectbox("Fuel type", ['Petrol' 'Diesel' 'CNG' 'LPG' 'Electric'])
+brand = st.selectbox("Vehicle brand", ['Maruti', 'Hyundai', 'Ford', 'Renault', 'Mini', 'Mercedes-Benz', 'Toyota',
+ 'Volkswagen', 'Honda', 'Mahindra', 'Datsun', 'Tata', 'Kia', 'BMW', 'Audi',
+ 'Land Rover', 'Jaguar', 'MG', 'Isuzu', 'Porsche', 'Skoda', 'Volvo', 'Lexus',
+ 'Jeep', 'Maserati', 'Bentley', 'Nissan', 'isuzu', 'Ferrari', 'Mercedes-AMG',
+ 'Rolls-Royce', 'Force'])
+fuel_type = st.selectbox("Fuel type", ["Petrol", "Diesel", "CNG", "LPG", "Electric"])
 vehicle_age = st.number_input("Car age (years)", 0, 30, value=5)
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
 mileage = st.number_input("Car mileage (km/L)", 1, 40, value=15)
@@ -83,6 +88,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
