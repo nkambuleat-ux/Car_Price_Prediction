@@ -22,6 +22,15 @@ model = joblib.load(io.BytesIO(response.content))
 with open('dummy_columns.pkl', 'rb') as f:
     dummy_columns = pickle.load(f)
 numeric_cols = ['vehicle_age', 'mileage', 'engine', 'max_power']
+complete_cols = ['vehicle_age',
+ 'transmission_type',
+ 'mileage',
+ 'engine',
+ 'max_power',
+ 'fuel_type_Diesel',
+ 'fuel_type_Electric',
+ 'fuel_type_LPG',
+ 'fuel_type_Petrol']
 
 
 # --- Streamlit UI ---
@@ -70,7 +79,7 @@ for col in dummy_columns:
 
 
 # Ensure column order matches training
-user_input = user_input[dummy_columns]
+user_input = user_input[complete_cols]
 
 st.write("Processed input ready for model:")
 st.dataframe(user_input)
@@ -86,6 +95,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
