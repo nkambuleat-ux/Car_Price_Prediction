@@ -9,12 +9,10 @@ scaler = joblib.load("scaler.pkl")          # StandardScaler fitted on training 
 y_scaler = joblib.load("y_scaler.pkl")      # Scaler fitted on target variable
 encoder = joblib.load("encoder.pkl")        # LabelEncoder fitted on transmission type
 model = joblib.load("best_rf_model.pkl")    # Trained model
-# Load saved columns
-with open('dummy_columns.pkl', 'rb') as f:
-    dummy_columns = pickle.load(f)
-
 
 # Columns
+with open('dummy_columns.pkl', 'rb') as f:
+    dummy_columns = pickle.load(f)
 numeric_cols = ['vehicle_age', 'mileage', 'engine', 'max_power']
 
 
@@ -55,9 +53,8 @@ user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
 # Encode categorical feature using the fitted encoder
 user_input['transmission_type'] = encoder.transform(user_input['transmission_type'])
 
-# Add other categorical features (fuel_type, brand) to user_input
+# Add other categorical features (fuel_type) to user_input
 user_input['fuel_type'] = fuel_type
-user_input['brand'] = brand
 
 # Apply get_dummies to handle one-hot encoding
 user_input = pd.get_dummies(user_input)
@@ -86,5 +83,6 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
