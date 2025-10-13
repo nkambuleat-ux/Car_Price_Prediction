@@ -3,6 +3,9 @@ import pickle
 import numpy as np
 import pandas as pd
 import joblib
+import requests
+import io
+
 
 # --- Load your fitted scaler, y_scaler, encoder and model ---
 scaler = joblib.load("scaler.pkl")          # StandardScaler fitted on training numeric columns
@@ -88,6 +91,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
