@@ -18,27 +18,11 @@ response = requests.get(url)
 model = joblib.load(io.BytesIO(response.content))
 
 
-# Columns
-with open('dummy_columns.pkl', 'rb') as f:
-    dummy_columns = pickle.load(f)
-numeric_cols = ['vehicle_age', 'mileage', 'engine', 'max_power']
-complete_cols = ['vehicle_age',
- 'transmission_type',
- 'mileage',
- 'engine',
- 'max_power',
- 'fuel_type_Diesel',
- 'fuel_type_Electric',
- 'fuel_type_LPG',
- 'fuel_type_Petrol']
-
-
 # --- Streamlit UI ---
 st.title("Car Price Prediction Application")
 st.header("Please complete the details below")
 
 # Feature inputs
-fuel_type = st.selectbox("Fuel type", ["Diesel", "Electric", "LPG", "Petrol"])
 vehicle_age = st.number_input("Car age (years)", 0, 30, value=5)
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"])
 mileage = st.number_input("Car mileage (km/L)", 1, 40, value=15)
@@ -59,24 +43,11 @@ user_input = pd.DataFrame({
 # Apply log( x + 1 ) to numeric columns to avoid log(0)
 user_input[numeric_cols] = np.log1p(user_input[numeric_cols])
 
-# Transform numeric features using the **already fitted** scaler
+# Transform numeric features using the fitted scaler
 user_input[numeric_cols] = scaler.transform(user_input[numeric_cols])
 
 # Encode categorical feature using the fitted encoder
 user_input['transmission_type'] = encoder.transform(user_input['transmission_type'])
-
-# Add other categorical features (fuel_type) to user_input
-user_input['fuel_type'] = fuel_type
-
-# Apply get_dummies to handle one-hot encoding
-user_input = pd.get_dummies(user_input)
-
-
-# Align with training dummy columns
-for col in dummy_columns:
-    if col not in user_input:
-        user_input[col] = 0
-
 
 # Ensure column order matches training
 user_input = user_input[complete_cols]
@@ -95,6 +66,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
