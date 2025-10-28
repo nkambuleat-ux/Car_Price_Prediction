@@ -7,16 +7,25 @@ import requests
 import io
 
 
-# --- Load your fitted scaler, y_scaler, encoder and model ---
-scaler = joblib.load("scaler.pkl")          # StandardScaler fitted on training numeric columns
-y_scaler = joblib.load("y_scaler.pkl")      # Scaler fitted on target variable
-encoder = joblib.load("encoder.pkl")        # LabelEncoder fitted on transmission type
+# Open the pickle file in read-binary mode
+with open("model.pkl", "rb") as file:
+    model = pickle.load(file)
 
-#load the model
-url = "https://drive.google.com/uc?export=download&id=1EI0zukjBbhKcxTclqNQdUODSiV1fs7NB"
+with open("scaler.pkl", "rb") as file:
+    scaler = pickle.load(file)      # StandardScaler fitted on training numeric columns
+
+with open("y_scaler.pkl", "rb") as file:
+    y_scaler = pickle.load(file)    # Scaler fitted on target variable
+
+with open("encoder.pkl", "rb") as file:
+    encoder = pickle.load(file)     # LabelEncoder fitted on transmission type
+
+
+# Load the model from Google Drive
+url = "https://drive.google.com/file/d/1Lcr3OMipE7l1u457YoJmdxY50cad3Frg/view?usp=drive_link"
 response = requests.get(url)
-model = joblib.load(io.BytesIO(response.content))
 
+model = pickle.load(io.BytesIO(response.content)) 
 
 # --- Streamlit UI ---
 st.title("Car Price Prediction Application")
@@ -66,6 +75,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
