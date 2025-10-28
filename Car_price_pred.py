@@ -14,7 +14,7 @@ with open("y_scaler.pkl", "rb") as file:
     y_scaler = pickle.load(file) 
     
 # Scaler fitted on target variable 
-with open("encoder.pkl", "rb") as file: 
+with open("rec_encoder.pkl", "rb") as file: 
     encoder = pickle.load(file) 
 
 # LabelEncoder fitted on transmission type 
@@ -65,6 +65,7 @@ result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
 # If the target was also log-transformed during training, reverse it 
 final_prediction = np.expm1(result_transformed).flatten()[0] 
 st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
