@@ -49,7 +49,8 @@ user_input = pd.DataFrame({
 
 # --- Preprocessing ---
 # Apply log( x + 1 ) to numeric columns to avoid log(0)
-numeric_cols = ["vehicle_age", "mileage", "engine", "max_power"]
+# numeric_cols = ["vehicle_age", "mileage", "engine", "max_power"]
+numeric_cols = [vehicle_age, mileage, engine, max_power]
 user_input[numeric_cols] = np.log1p(user_input[numeric_cols])
 
 # Transform numeric features using the fitted scaler
@@ -75,6 +76,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
