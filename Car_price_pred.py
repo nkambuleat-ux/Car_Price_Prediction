@@ -1,5 +1,6 @@
 import streamlit as st
 import pickle
+Import joblib
 import numpy as np
 import pandas as pd
 import requests
@@ -19,8 +20,8 @@ with open("encoder.pkl", "rb") as file:
 
 
 # Load the model from Google Drive
-# https://drive.google.com/uc?export=download&id=1Lcr3OMipE7l1u457YoJmdxY50cad3Frg
-url = "https://drive.google.com/file/d/1Lcr3OMipE7l1u457YoJmdxY50cad3Frg/view?usp=drive_link"
+# https://drive.google.com/file/d/1MzonX_w_KCmIgqcmFWqtxFXgvoZ0GRYn/view?usp=drive_link
+url = "https://drive.google.com/file/d/1MzonX_w_KCmIgqcmFWqtxFXgvoZ0GRYn/view?usp=drive_link"
 
 
 response = requests.get(url)
