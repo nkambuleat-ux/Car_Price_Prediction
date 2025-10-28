@@ -50,8 +50,6 @@ user_input[numeric_cols] = scaler.transform(user_input[numeric_cols].values)
 # Encode categorical feature using the fitted encoder 
 user_input['transmission_type'] = encoder.transform(user_input['transmission_type'].values) 
 
-# Ensure column order matches training 
-user_input = user_input["transmission_type"] 
 st.write("Processed input ready for model:") 
 st.dataframe(user_input) 
 
@@ -63,6 +61,7 @@ if st.button("Predict"):
     # If the target was also log-transformed during training, reverse it 
     final_prediction = np.expm1(result_transformed).flatten()[0] 
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
