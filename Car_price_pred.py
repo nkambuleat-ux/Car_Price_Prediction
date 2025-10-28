@@ -58,13 +58,12 @@ st.dataframe(user_input)
 # --- Prediction --- 
 if st.button("Predict"): 
     result = model.predict(user_input) 
-    
-# Inverse transform the predicted (scaled) value back to original 
-result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1)) 
+    # Inverse transform the predicted (scaled) value back to original
+    result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1)) 
+    # If the target was also log-transformed during training, reverse it 
+    final_prediction = np.expm1(result_transformed).flatten()[0] 
+    st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
 
-# If the target was also log-transformed during training, reverse it 
-final_prediction = np.expm1(result_transformed).flatten()[0] 
-st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
 
 
 
