@@ -7,7 +7,7 @@ import requests
 import io 
 
 # Open the pickle file in read-binary mode 
-with open("scaler.pkl", "rb") as file: 
+with open("scaler_rev2.pkl", "rb") as file: 
     scaler = pickle.load(file) 
 # StandardScaler fitted on training numeric columns 
 with open("y_scaler.pkl", "rb") as file: 
@@ -65,5 +65,6 @@ result_transformed = y_scaler.inverse_transform(result.reshape(-1, 1))
 # If the target was also log-transformed during training, reverse it 
 final_prediction = np.expm1(result_transformed).flatten()[0] 
 st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
