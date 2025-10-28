@@ -8,8 +8,6 @@ import io
 
 
 # Open the pickle file in read-binary mode
-with open("model.pkl", "rb") as file:
-    model = pickle.load(file)
 
 with open("scaler.pkl", "rb") as file:
     scaler = pickle.load(file)      # StandardScaler fitted on training numeric columns
@@ -75,6 +73,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
