@@ -1,6 +1,6 @@
 import streamlit as st
 import pickle
-Import joblib
+import joblib
 import numpy as np
 import pandas as pd
 import requests
@@ -20,13 +20,11 @@ with open("encoder.pkl", "rb") as file:
 
 
 # Load the model from Google Drive
-# https://drive.google.com/file/d/1MzonX_w_KCmIgqcmFWqtxFXgvoZ0GRYn/view?usp=drive_link
-url = "https://drive.google.com/file/d/1MzonX_w_KCmIgqcmFWqtxFXgvoZ0GRYn/view?usp=drive_link"
-
+url = "https://drive.google.com/uc?export=download&id=1MzonX_w_KCmIgqcmFWqtxFXgvoZ0GRYn"
 
 response = requests.get(url)
 
-model = pickle.load(io.BytesIO(response.content))
+model = joblib.load(io.BytesIO(response.content))
 
 # Streamlit UI
 st.title("Car Price Prediction Application")
@@ -76,6 +74,7 @@ if st.button("Predict"):
     final_prediction = np.expm1(result_transformed).flatten()[0]
     
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
