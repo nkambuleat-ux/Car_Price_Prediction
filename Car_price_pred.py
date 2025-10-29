@@ -27,7 +27,7 @@ model = joblib.load(io.BytesIO(response.content))
 # Streamlit UI 
 st.image("header.png", width=350)
 st.title("Car Price Prediction Application") 
-st.header("Please complete the details below") 
+st.header("Enter your vehicle details below") 
 
 # Feature inputs 
 vehicle_age = st.slider("Car age (years)", 0, 30, value=5) 
@@ -62,6 +62,7 @@ if st.button("Predict"):
     # If the target was also log-transformed during training, reverse it 
     final_prediction = np.expm1(result_transformed).flatten()[0] 
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
