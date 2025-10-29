@@ -18,19 +18,19 @@ with open("rec_encoder.pkl", "rb") as file:
     encoder = pickle.load(file) 
 
 # LabelEncoder fitted on transmission type 
+
 # Load the model from Google Drive 
-
 url = "https://drive.google.com/uc?export=download&id=1MzonX_w_KCmIgqcmFWqtxFXgvoZ0GRYn" 
-
 response = requests.get(url) 
 model = joblib.load(io.BytesIO(response.content)) 
 
 # Streamlit UI 
-st.title("Car Price Prediction Application") 
+# st.image("header.png", width=150)
+st.title("Value Estimator - Car Price Prediction Application") 
 st.header("Please complete the details below") 
 
 # Feature inputs 
-vehicle_age = st.number_input("Car age (years)", 0, 30, value=5) 
+vehicle_age = st.slider("Car age (years)", 0, 30, value=5) 
 transmission_type = st.selectbox("Transmission type", ["Automatic", "Manual"]) 
 mileage = st.number_input("Car mileage (km/L)", 1, 40, value=15) 
 engine = st.number_input("Car engine capacity (cc)", 100, 10000, value=1500) 
@@ -50,8 +50,9 @@ user_input[numeric_cols] = scaler.transform(user_input[numeric_cols].values)
 # Encode categorical feature using the fitted encoder 
 user_input['transmission_type'] = encoder.transform(user_input['transmission_type'].values) 
 
-st.write("Processed input ready for model:") 
-st.dataframe(user_input) 
+# calculated input to the model to help with troubleshooting.
+# st.write("Processed input ready for model:") 
+# st.dataframe(user_input) 
 
 # --- Prediction --- 
 if st.button("Predict"): 
@@ -61,6 +62,7 @@ if st.button("Predict"):
     # If the target was also log-transformed during training, reverse it 
     final_prediction = np.expm1(result_transformed).flatten()[0] 
     st.success(f"The predicted car price is Rs {final_prediction:,.2f}")
+
 
 
 
